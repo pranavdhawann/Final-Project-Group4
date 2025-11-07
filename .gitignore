@@ -72,7 +72,6 @@ logs/
 .cache/
 .pytest_cache/
 .mypy_cache/
-
 # Temporary files
 *.tmp
 *.temp
