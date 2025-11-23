@@ -1,4 +1,5 @@
 from collections import defaultdict
+from tqdm import tqdm
 
 class Vocab:
     def __init__(self, tokens, min_freq=5, specials= None):
@@ -8,7 +9,7 @@ class Vocab:
         self.token_freq = defaultdict(int)
         self.min_freq = min_freq
         self.specials = specials
-        self.itos = list(self.specials) # future: default dict for faster retrival
+        self.itos = list(self.specials)
         self.stoi = {tok: i for i, tok in enumerate(specials)}
 
         if tokens is not None:
@@ -16,10 +17,11 @@ class Vocab:
 
     def build_vocab(self, tokens):
 
-        for tok in tokens:
+        print("Building vocab...")
+        for tok in tqdm(tokens):
             self.token_freq[tok] += 1
 
-        for tok, freq in self.token_freq.items():
+        for tok, freq in tqdm(self.token_freq.items()):
             if freq > self.min_freq:
                 self.stoi[tok] = len(self.itos)
                 self.itos.append(tok)
@@ -45,7 +47,7 @@ class Vocab:
     def decode(self, id):
         return self.id_to_token(id)
 
-    def save(self, path= "vocab.txt"):
+    def save(self, path= "../data/vocab.txt"):
         with open(path, "w", encoding="utf-8") as f:
             for tok in self.itos:
                 f.write(tok + "\n")
@@ -67,8 +69,9 @@ if __name__ == "__main__":
         data = json.load(f)
 
     tokens = []
-    for i in data:
-        tokens = tokens + i["tokens"]
+    for i in tqdm(data):
+        for token in i["tokens"]:
+            tokens.append(token)
 
     vocab = Vocab(tokens=tokens)
     vocab.build_vocab(tokens)
