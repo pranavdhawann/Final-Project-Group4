@@ -19,17 +19,22 @@ class Vocab:
 
         print("Building vocab...")
         for tok in tqdm(tokens):
+            tok = tok.strip().lower()
+            if tok.isnumeric():
+                continue
             self.token_freq[tok] += 1
 
         for tok, freq in tqdm(self.token_freq.items()):
             if freq > self.min_freq:
                 self.stoi[tok] = len(self.itos)
                 self.itos.append(tok)
+
     def __len__(self):
         return len(self.itos)
 
     def token_to_id(self, token):
         if token in self.stoi:
+            token= token.strip().lower()
             return self.stoi[token]
 
         return "<unk>"
