@@ -1,6 +1,7 @@
 # Data directories
 /Data
 /Charts
+*.json
 .env
 /.venv
 
